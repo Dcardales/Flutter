@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:actividad_1/controller/carros_controller.dart';
 import 'package:actividad_1/controller/auth_controller.dart';
 import 'package:actividad_1/model/carro_model.dart';
 import 'package:actividad_1/view/login_view.dart';
-import 'package:flutter/material.dart';
 
 class CarrosView extends StatefulWidget {
   const CarrosView({super.key});
@@ -33,7 +33,9 @@ class _CarrosViewState extends State<CarrosView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
         title: const Text('Mis Carros Eléctricos'),
         actions: [
           IconButton(
@@ -54,13 +56,57 @@ class _CarrosViewState extends State<CarrosView> {
           } else {
             final carros = snapshot.data!;
             return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
               itemCount: carros.length,
               itemBuilder: (context, index) {
                 final carro = carros[index];
-                return ListTile(
-                  leading: const Icon(Icons.electric_car),
-                  title: Text('${carro.marca} ${carro.modelo}'),
-                  subtitle: Text('ID: ${carro.id}'),
+                return Card(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 4,
+                  shadowColor: Colors.blueAccent.withOpacity(0.2),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            carro.imagen,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.image, size: 50),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'PLACA: ${carro.placa}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'CONDUCTOR: ${carro.conductor}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 );
               },
             );
