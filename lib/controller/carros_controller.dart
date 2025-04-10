@@ -3,36 +3,29 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:actividad_1/model/carro_model.dart';
 
+
 class CarrosController {
-  static const String _url =
-      'https://carros-electricos.wiremockapi.cloud/carros';
+  static const String _baseUrl = 'https://67f7d1812466325443eadd17.mockapi.io/carros';
 
   static Future<List<Carro>> obtenerCarros() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-
-    if (token == null) return [];
-
-    final response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': token, 
-        'Content-Type': 'application/json',
-      },
-    );
-
-    print('TOKEN ENVIADO: $token');
-    print('STATUS: ${response.statusCode}');
-    print('BODY: ${response.body}');
-
-    print('Respuesta carros: ${response.body}');
+    final response = await http.get(Uri.parse(_baseUrl));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((item) => Carro.fromJson(item)).toList();
+      return data.map((json) => Carro.fromJson(json)).toList();
     } else {
-      print('Error al obtener carros: ${response.statusCode}');
-      return [];
+      throw Exception('Error al obtener carros');
+    }
+  }
+
+  static Future<Carro> obtenerCarroPorQR(String codigo) async {
+    final response = await http.get(Uri.parse('\$_baseUrl/\$codigo'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return Carro.fromJson(data);
+    } else {
+      throw Exception('Carro no encontrado');
     }
   }
 }
