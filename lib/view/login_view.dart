@@ -286,7 +286,7 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                'Credenciales predeterminadas: admin/admin',
+                                'Carros Electricos.co',
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontStyle: FontStyle.italic,
